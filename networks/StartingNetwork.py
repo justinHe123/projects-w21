@@ -10,8 +10,8 @@ class StartingNetwork(torch.nn.Module):
     def __init__(self, input_dim, output_dim):
         super(StartingNetwork, self).__init__()
         self.squeezenet = torch.hub.load('pytorch/vision:v0.6.0', 'squeezenet1_0', pretrained=True)
-        for param in self.squeezenet.parameters():
-            param.requires_grad = False
+        # for param in self.squeezenet.parameters():
+        #     param.requires_grad = False
         # self.conv1 = nn.Conv2d(input_dim, 64, kernel_size=3, stride=1, padding=1)
         # self.conv2 = nn.Conv2d(64, 128, kernel_size=3, stride=1)
         # self.conv3 = nn.Conv2d(128, 256, kernel_size=3, stride=1)
