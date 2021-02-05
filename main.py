@@ -38,7 +38,7 @@ def main():
     data = np.genfromtxt(path, delimiter=',', dtype='str')
     train_dataset = StartingDataset(truth = data[1:int(count*train_prop), 1], images = data[1:int(count*train_prop), 0], base = './cassava-leaf-disease-classification/train_images')
     val_dataset = StartingDataset(truth = data[int(count*train_prop):count, 1], images = data[int(count*train_prop):count, 0], base = './cassava-leaf-disease-classification/train_images')
-    print(train_dataset[0])
+
     model = StartingNetwork(3, 5)
     model = model.to(device)
     starting_train(
@@ -48,7 +48,8 @@ def main():
         hyperparameters=hyperparameters,
         n_eval=args.n_eval,
         summary_path=summary_path,
-        device=device
+        device=device,
+        model_name=args.model_name
     )
 
 
@@ -58,6 +59,9 @@ def parse_arguments():
     parser.add_argument("--batch_size", type=int, default=constants.BATCH_SIZE)
     parser.add_argument(
         "--n_eval", type=int, default=constants.N_EVAL,
+    )
+    parser.add_argument(
+        "--model_name", type=str, default=constants.MODEL_NAME,
     )
     return parser.parse_args()
 
