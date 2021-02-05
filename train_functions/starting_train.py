@@ -5,7 +5,7 @@ import torch.utils.tensorboard
 
 
 def starting_train(
-    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device
+    train_dataset, val_dataset, model, hyperparameters, n_eval, summary_path, device, model_name
 ):
     """
     Trains and evaluates a model.
@@ -18,6 +18,7 @@ def starting_train(
         n_eval:          Interval at which we evaluate our model.
         summary_path:    Path where Tensorboard summaries are located.
         device:          cuda or cpu
+        model_name:      name to save model keys as
     """
 
     # Get keyword arguments
@@ -79,7 +80,7 @@ def starting_train(
                 # Compute validation loss and accuracy.
                 # Log the results to Tensorboard.
                 # Don't forget to turn off gradient calculations!
-                eval_accuracy, eval_loss = evaluate(val_loader, model, loss_fn,device)
+                eval_accuracy, eval_loss = evaluate(val_loader, model, loss_fn, device, model_name)
                 writer.add_scalar("eval_accuracy",eval_accuracy,global_step=step)
                 writer.add_scalar("eval_loss",eval_loss, global_step=step)
             # step += 1
@@ -103,7 +104,7 @@ def compute_accuracy(outputs, labels):
     return n_correct / n_total
 
 
-def evaluate(val_loader, model, loss_fn,device):
+def evaluate(val_loader, model, loss_fn,device, model_name):
     """
     Computes the loss and accuracy of a model on the validation dataset.
 
@@ -125,5 +126,5 @@ def evaluate(val_loader, model, loss_fn,device):
         total += len(batch_labels)
         correct += (torch.argmax(predictions) == batch_labels).sum().item()
     print(100*correct/total,"%")
-    torch.save(model.state_dict(),f"./models/cnn{100*correct/total}.pt")
+    torch.save(model.state_dict(),f"./models/{model_name}_{100*correct/total}.pt")
     return (100*correct/total), loss
