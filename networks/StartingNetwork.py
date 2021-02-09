@@ -56,4 +56,5 @@ class StartingNetwork(torch.nn.Module):
         x = F.relu(x)
         x = self.fc2(x)
         # print("SHape after FCN",x.shape)
+        # print(x)
         return x
