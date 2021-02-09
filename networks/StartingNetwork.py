@@ -49,7 +49,7 @@ class StartingNetwork(torch.nn.Module):
         # # print('Shape after CNN: ', x.shape)
         with torch.no_grad():
             x = self.resnet(x)
-        print(x.shape)
+        # print(x.shape)
         x = torch.reshape(x,[-1, self.flatten_size])
         # print('After reshaping',x.shape)
         x = self.fc1(x)
