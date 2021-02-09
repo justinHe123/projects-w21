@@ -9,16 +9,16 @@ class StartingNetwork(torch.nn.Module):
 
     def __init__(self, input_dim, output_dim):
         super(StartingNetwork, self).__init__()
-        self.squeezenet = torch.hub.load('pytorch/vision:v0.6.0', 'squeezenet1_0', pretrained=True)
-        # for param in self.squeezenet.parameters():
-        #     param.requires_grad = False
+        self.resnet = torch.hub.load('pytorch/vision:v0.6.0', 'resnet18', pretrained=True)
+        self.resnet = nn.Sequential(*list(self.resnet.children())[:-1])
         # self.conv1 = nn.Conv2d(input_dim, 64, kernel_size=3, stride=1, padding=1)
         # self.conv2 = nn.Conv2d(64, 128, kernel_size=3, stride=1)
         # self.conv3 = nn.Conv2d(128, 256, kernel_size=3, stride=1)
         # # self.conv4 = nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1)
         # self.conv4 = nn.Conv2d(256, 10, kernel_size=3, stride=1)
         # self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.flatten_size = 1000
+        self.flatten_size = 512
+        # 1000
         # 10 * 35 *48
         # 33600
         # 10*50*37
@@ -47,8 +47,9 @@ class StartingNetwork(torch.nn.Module):
         # x = F.relu(x)
         # x = self.maxpool1(x)
         # # print('Shape after CNN: ', x.shape)
-        x = self.squeezenet(x)
-        # print(x.shape)
+        with torch.no_grad():
+            x = self.resnet(x)
+        print(x.shape)
         x = torch.reshape(x,[-1, self.flatten_size])
         # print('After reshaping',x.shape)
         x = self.fc1(x)
