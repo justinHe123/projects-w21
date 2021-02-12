@@ -16,9 +16,17 @@ class StartingDataset(torch.utils.data.Dataset):
         img = Image.open(f'{self.base}/{path}')
         preprocess = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Resize([224,224])
         ])
-        tensor = preprocess(img)
+        preprocess2 = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        ])
+
+        tensor = preprocess2(img)
         return tensor, int(label)
 
     def __len__(self):
