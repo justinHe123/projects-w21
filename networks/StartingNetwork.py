@@ -13,7 +13,7 @@ class StartingNetwork(torch.nn.Module):
         # self.resnet = torch.hub.load('pytorch/vision:v0.6.0', 'resnet18', pretrained=True)
         # self.resnet = nn.Sequential(*list(self.resnet.children())[:-1])
 
-        self.efficient_net = EfficientNet.from_pretrained('efficientnet-b7')
+        self.efficient_net = EfficientNet.from_pretrained('efficientnet-b4')
         # print(EfficientNet.get_image_size('efficientnet-b4'))
 
         # self.efficient_net = nn.Sequential(*list(self.efficient_net.children())[:-1])
@@ -23,7 +23,7 @@ class StartingNetwork(torch.nn.Module):
         # # self.conv4 = nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1)
         # self.conv4 = nn.Conv2d(256, 10, kernel_size=3, stride=1)
         # self.maxpool1 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.flatten_size = 2560*12*12
+        self.flatten_size = 1792*12*12
         # 512
         # 1000
         # 10 * 35 *48
