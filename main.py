@@ -9,6 +9,7 @@ from networks.StartingNetwork import StartingNetwork
 from train_functions.starting_train import starting_train
 import numpy as np
 import torch
+from efficientnet_pytorch import EfficientNet
 
 SUMMARIES_PATH = "training_summaries"
 
@@ -37,10 +38,24 @@ def main():
     train_prop = 0.70
     path = './cassava-leaf-disease-classification/train.csv'
     data = np.genfromtxt(path, delimiter=',', dtype='str')
-    train_dataset = StartingDataset(truth = data[1:int(count*train_prop), 1], images = data[1:int(count*train_prop), 0], base = './cassava-leaf-disease-classification/train_images')
-    val_dataset = StartingDataset(truth = data[int(count*train_prop):count, 1], images = data[int(count*train_prop):count, 0], base = './cassava-leaf-disease-classification/train_images')
 
-    model = StartingNetwork(3, 5)
+    if 'efficientnet' in args.arch:
+        image_size = EfficientNet.get_image_size(args.arch)
+        with torch.no_grad():
+            x = torch.zeros([1, 3, image_size, image_size])
+            x = EfficientNet.from_pretrained(args.arch).extract_features(x)
+            flatten_size = x.shape[1]*x.shape[2]*x.shape[3]            
+            print(x.shape)
+    else:
+        image_size = args.image_size
+        flatten_size = args.flatten_size
+    
+    print(image_size)
+    print(flatten_size)
+    train_dataset = StartingDataset(truth = data[1:int(count*train_prop), 1], images = data[1:int(count*train_prop), 0], base = './cassava-leaf-disease-classification/train_images', size=image_size)
+    val_dataset = StartingDataset(truth = data[int(count*train_prop):count, 1], images = data[int(count*train_prop):count, 0], base = './cassava-leaf-disease-classification/train_images', size=image_size)
+
+    model = StartingNetwork(3, 5, arch=args.arch, flatten_size = flatten_size)
     model = model.to(device)
     starting_train(
         train_dataset=train_dataset,
@@ -63,6 +78,15 @@ def parse_arguments():
     )
     parser.add_argument(
         "--model_name", type=str, default=constants.MODEL_NAME,
+    )
+    parser.add_argument(
+        "--arch", type=str, default=constants.ARCH
+    )
+    parser.add_argument(
+        "--image_size", type=int, default=224
+    )
+    parser.add_argument(
+        "--flatten_size", type = int, default = 0
     )
     return parser.parse_args()
 
