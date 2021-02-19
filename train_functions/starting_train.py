@@ -101,7 +101,7 @@ def compute_accuracy(outputs, labels):
     Example output:
         0.75
     """  
-    n_correct = (torch.argmax(outputs) == labels).sum().item()
+    n_correct = (torch.argmax(outputs,axis=1) == labels).sum().item()
     n_total = len(outputs)
     return n_correct / n_total
 
