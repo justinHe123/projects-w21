@@ -36,7 +36,7 @@ def main():
     count = 1000
     # count = 64
     train_prop = 0.70
-    path = './cassava-leaf-disease-classification/train.csv'
+    path = args.path
     data = np.genfromtxt(path, delimiter=',', dtype='str')
 
     if 'efficientnet' in args.arch:
@@ -87,6 +87,9 @@ def parse_arguments():
     )
     parser.add_argument(
         "--flatten_size", type = int, default = 0
+    )
+    parser.add_argument(
+        "--path", type=str, default='./cassava-leaf-disease-classification/train.csv'
     )
     return parser.parse_args()
 
