@@ -32,11 +32,11 @@ def main():
     print("Batch size:", args.batch_size)
 
     # Initalize dataset and model. Then train the model!
-    count = 21397
+    count = args.count
     # count = 1000
     # count = 64
     train_prop = 0.70
-    path = args.path
+    path = f"{args.path}/train.csv"
     data = np.genfromtxt(path, delimiter=',', dtype='str')
 
     if 'efficientnet' in args.arch:
@@ -52,8 +52,8 @@ def main():
     
     print(image_size)
     print(flatten_size)
-    train_dataset = StartingDataset(truth = data[1:int(count*train_prop), 1], images = data[1:int(count*train_prop), 0], base = './cassava-leaf-disease-classification/train_images', size=image_size)
-    val_dataset = StartingDataset(truth = data[int(count*train_prop):count, 1], images = data[int(count*train_prop):count, 0], base = './cassava-leaf-disease-classification/train_images', size=image_size)
+    train_dataset = StartingDataset(truth = data[1:int(count*train_prop), 1], images = data[1:int(count*train_prop), 0], base = f'{args.path}/train_images', size=image_size)
+    val_dataset = StartingDataset(truth = data[int(count*train_prop):count, 1], images = data[int(count*train_prop):count, 0], base = f'{args.path}/train_images', size=image_size)
 
     model = StartingNetwork(3, 5, arch=args.arch, flatten_size = flatten_size)
     model = model.to(device)
@@ -89,7 +89,13 @@ def parse_arguments():
         "--flatten_size", type = int, default = 0
     )
     parser.add_argument(
-        "--path", type=str, default='./cassava-leaf-disease-classification/train.csv'
+        "--path", type=str, default='./cassava-leaf-disease-classification'
+    )
+    parser.add_argument(
+        "--count", type=int, default=21397
+    )
+    parser.add_argument(
+        "--prop", type=float, default=0.70
     )
     return parser.parse_args()
 
