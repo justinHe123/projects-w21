@@ -32,8 +32,8 @@ def main():
     print("Batch size:", args.batch_size)
 
     # Initalize dataset and model. Then train the model!
-    # count = 21397
-    count = 1000
+    count = 21397
+    # count = 1000
     # count = 64
     train_prop = 0.70
     path = args.path
