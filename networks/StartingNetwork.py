@@ -16,8 +16,10 @@ class StartingNetwork(torch.nn.Module):
         self.efficient_net = EfficientNet.from_pretrained(arch)
         # print(EfficientNet.get_image_size('efficientnet-b4'))
         self.flatten_size = flatten_size
-        self.fc1 = nn.Linear(self.flatten_size,128)
-        self.fc2 = nn.Linear(128,output_dim)
+        self.fc1 = nn.Linear(self.flatten_size,512)
+        self.fc2 = nn.Linear(512,256)
+        self.fc3 = nn.Linear(256,64)
+        self.fc4 = nn.Linear(64,output_dim)
         
     def forward(self, x):   
         # with torch.no_grad():
@@ -31,4 +33,8 @@ class StartingNetwork(torch.nn.Module):
         x = self.fc1(x)
         x = F.relu(x)
         x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        x = F.relu(x)
+        x = self.fc4(x)
         return x
