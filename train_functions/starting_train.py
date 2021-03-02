@@ -69,6 +69,8 @@ def starting_train(
             optimizer.step()
 
             step +=1
+            writer.add_scalar("train_loss", current_loss, global_step = step)
+            writer.add_scalar("train_accuracy", compute_accuracy(predictions, batch_labels), global_step = step)
             # Periodically evaluate our model + log to Tensorboard
             if step % n_eval == 0:
                 # TODO:

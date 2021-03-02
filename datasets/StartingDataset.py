@@ -20,8 +20,8 @@ class StartingDataset(torch.utils.data.Dataset):
         #     transforms.Resize([224,224])
         # ])
         preprocess2 = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
+            transforms.Resize(512),
+            transforms.CenterCrop(448),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
@@ -32,7 +32,7 @@ class StartingDataset(torch.utils.data.Dataset):
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ])
 
-        tensor = preprocess_for_efficient_net(img)
+        tensor = preprocess2(img)
         return tensor, int(label)
 
     def __len__(self):
