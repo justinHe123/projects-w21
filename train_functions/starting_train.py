@@ -22,7 +22,7 @@ def starting_train(
     """
 
     # Get keyword arguments
-    batch_size, epochs = hyperparameters["batch_size"], hyperparameters["epochs"]
+    batch_size, epochs, decay = hyperparameters["batch_size"], hyperparameters["epochs"], hyperparameters["weight_decay"]
 
     # Initialize dataloaders
     train_loader = torch.utils.data.DataLoader(
@@ -33,7 +33,7 @@ def starting_train(
     )
 
     # Initalize optimizer (for gradient descent) and loss function
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(),weight_decay=decay)
     loss_fn = nn.CrossEntropyLoss()
 
     # Initialize summary writer (for logging)
@@ -133,5 +133,5 @@ def evaluate(val_loader, model, loss_fn,device, model_name):
             correct += (torch.argmax(predictions,axis=1) == batch_labels).sum().item()
     print(100*correct/total,"%")
     model.train()
-    # torch.save(model.state_dict(),f"./models/{model_name}_{100*correct/total}.pt")
+    torch.save(model.state_dict(),f"./models/{model_name}_{100*correct/total}.pt")
     return (100*correct/total), loss

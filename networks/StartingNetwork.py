@@ -31,9 +31,9 @@ class StartingNetwork(torch.nn.Module):
         # 10 * 35 *48
         # 33600
         # 10*50*37
-        self.fc1 = nn.Linear(self.flatten_size,1024)
-        self.fc2 = nn.Linear(1024,256)
-        self.fc3 = nn.Linear(256,output_dim)
+        self.fc1 = nn.Linear(self.flatten_size,512)
+        # self.fc2 = nn.Linear(1024,256)
+        self.fc2 = nn.Linear(512,output_dim)
         
     def forward(self, x):   
         x = self.conv1(x)
@@ -50,6 +50,6 @@ class StartingNetwork(torch.nn.Module):
         x = self.fc1(x)
         x = F.relu(x)
         x = self.fc2(x)
-        x = F.relu(x)
-        x = self.fc3(x)
+        # x = F.relu(x)
+        # x = self.fc3(x)
         return x

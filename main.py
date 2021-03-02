@@ -16,7 +16,7 @@ SUMMARIES_PATH = "training_summaries"
 def main():
     # Get command line arguments
     args = parse_arguments()
-    hyperparameters = {"epochs": args.epochs, "batch_size": args.batch_size}
+    hyperparameters = {"epochs": args.epochs, "batch_size": args.batch_size, "weight_decay": args.weight_decay}
 
     # Create path for training summaries
     label = f"cassava__{int(time.time())}"
@@ -63,6 +63,9 @@ def parse_arguments():
     )
     parser.add_argument(
         "--model_name", type=str, default=constants.MODEL_NAME,
+    )
+    parser.add_argument(
+        "--weight_decay", type=float, default=constants.WEIGHT_DECAY,
     )
     return parser.parse_args()
 
