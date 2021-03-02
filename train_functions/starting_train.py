@@ -112,23 +112,25 @@ def evaluate(val_loader, model, loss_fn,device, model_name):
     """
     Computes the loss and accuracy of a model on the validation dataset.
 
-    TODO!
+    TODO!ons
     """
     model.eval()
     correct = 0
     total = 0
-    for i, batch in enumerate(val_loader):
-        # batch_inputs, batch_labels = batch_inputs.to(device), batch_labels.to(device)
-        batch_inputs, batch_labels = batch
-        batch_inputs = batch_inputs.to(device)
-        batch_labels = batch_labels.to(device)
-        batch_inputs = torch.squeeze(batch_inputs)
-        # print("Batch inputs is ",batch_inputs.size())
-        predictions = model.forward(batch_inputs) #16x10, axis 0 is batch size, axis 1 is output dim from the model
-        # predictions = model.forward(batch_inputs).argmax(axis=1)
-        loss = loss_fn(predictions, batch_labels)
-        total += len(batch_labels)
-        correct += (torch.argmax(predictions,axis=1) == batch_labels).sum().item()
+    with torch.no_grad():
+        for i, batch in enumerate(val_loader):
+            # batch_inputs, batch_labels = batch_inputs.to(device), batch_labels.to(device)
+            batch_inputs, batch_labels = batch
+            batch_inputs = batch_inputs.to(device)
+            batch_labels = batch_labels.to(device)
+            batch_inputs = torch.squeeze(batch_inputs)
+            # print("Batch inputs is ",batch_inputs.size())
+            predictions = model.forward(batch_inputs) #16x10, axis 0 is batch size, axis 1 is output dim from the model
+            # predictions = model.forward(batch_inputs).argmax(axis=1)
+            loss = loss_fn(predictions, batch_labels)
+            total += len(batch_labels)
+            correct += (torch.argmax(predictions,axis=1) == batch_labels).sum().item()
     print(100*correct/total,"%")
+    model.train()
     # torch.save(model.state_dict(),f"./models/{model_name}_{100*correct/total}.pt")
     return (100*correct/total), loss
