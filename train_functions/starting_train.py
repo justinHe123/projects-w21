@@ -85,10 +85,11 @@ def starting_train(
                 eval_accuracy, eval_loss = evaluate(val_loader, model, loss_fn, device, model_name)
                 writer.add_scalar("eval_accuracy",eval_accuracy,global_step=step)
                 writer.add_scalar("eval_loss",eval_loss, global_step=step)
+                torch.save(model.state_dict(),f"./models/{model_name}{eval_accuracy}.pt")
             # step += 1
 
         print()
-    torch.save(model.state_dict(),f"./models/{model_name}.pt")
+    # torch.save(model.state_dict(),f"./models/{model_name}.pt")
 
 
 
