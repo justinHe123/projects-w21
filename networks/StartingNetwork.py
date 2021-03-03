@@ -31,9 +31,10 @@ class StartingNetwork(torch.nn.Module):
         # 10 * 35 *48
         # 33600
         # 10*50*37
-        self.fc1 = nn.Linear(self.flatten_size,512)
+        self.fc1 = nn.Linear(self.flatten_size,1024)
         # self.fc2 = nn.Linear(1024,256)
-        self.fc2 = nn.Linear(512,output_dim)
+        self.fc2 = nn.Linear(1024,output_dim)
+        self.dropout = nn.Dropout(0.5)
         
     def forward(self, x):   
         x = self.conv1(x)
@@ -49,6 +50,7 @@ class StartingNetwork(torch.nn.Module):
         # print('After reshaping',x.shape)
         x = self.fc1(x)
         x = F.relu(x)
+        x = self.dropout(x)
         x = self.fc2(x)
         # x = F.relu(x)
         # x = self.fc3(x)
