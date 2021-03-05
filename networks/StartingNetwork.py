@@ -19,7 +19,7 @@ class StartingNetwork(torch.nn.Module):
         self.flatten_size = flatten_size
         self.fc1 = nn.Linear(self.flatten_size,128)
         self.fc2 = nn.Linear(128,output_dim)
-        
+        self.dropout = nn.Dropout(0.5)
     def forward(self, x):   
         # with torch.no_grad():
         # x = self.resnet(x)
