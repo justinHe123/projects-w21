@@ -12,7 +12,8 @@ class StartingNetwork(torch.nn.Module):
         super(StartingNetwork, self).__init__()
         # self.resnet = torch.hub.load('pytorch/vision:v0.6.0', 'resnet18', pretrained=True)
         # self.resnet = nn.Sequential(*list(self.resnet.children())[:-1])
-
+        self.conv1 = nn.Conv2d(input_dim,3,kernel_size=5,padding=2)
+        self.maxpool = nn.MaxPool2d(kernel_size=3,stride=1)
         self.efficient_net = EfficientNet.from_pretrained(arch)
         # print(EfficientNet.get_image_size('efficientnet-b4'))
         self.flatten_size = flatten_size
@@ -23,12 +24,16 @@ class StartingNetwork(torch.nn.Module):
         # with torch.no_grad():
         # x = self.resnet(x)
         # print("before "+str(x.shape))
-        with torch.no_grad():
-            x = self.efficient_net.extract_features(x)
+        x = self.conv1(x)
+        x = F.relu(x)
+        x = self.maxpool(x)
+        # with torch.no_grad():
+        x = self.efficient_net.extract_features(x)
         # print(f'before squeeze {x.shape}')
         x = torch.reshape(x,[-1, self.flatten_size])
         # print('After reshaping',x.shape)
         x = self.fc1(x)
         x = F.relu(x)
+        x = self.dropout(x)
         x = self.fc2(x)
         return x
